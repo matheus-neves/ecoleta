@@ -1,3 +1,6 @@
+# Databae
+*.sqlite
+
 # Logs
 logs
 *.log
