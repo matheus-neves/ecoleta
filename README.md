@@ -21,4 +21,4 @@ The **Ecoleta** is a application to help people find collection points for recyc
 This project is under the MIT license. See the [LICENSE](LICENSE.md) file for more details.
 
 ---
-Made with 💜by Matheus Neves 👋[See my linkedin!](https://www.linkedin.com/in/matheus-neves-front-end/)
+Made with :purple_heart: by Matheus Neves :wave: [See my linkedin!](https://www.linkedin.com/in/matheus-neves-front-end/)
