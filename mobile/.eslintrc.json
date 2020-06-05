@@ -43,6 +43,7 @@
     ],
     "import/prefer-default-export": "off",
     "@typescript-eslint/camelcase": "off",
+    "camelcase": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/prop-types": "off",
     "@typescript-eslint/explicit-function-return-type": [
