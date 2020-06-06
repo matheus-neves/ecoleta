@@ -8,5 +8,15 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
+    "plugins": [
+      {
+        "name": "typescript-styled-plugin",
+        "tags": [
+          "styled",
+          "css",
+          "sty"
+        ]
+      }
+    ]
   }
 }
