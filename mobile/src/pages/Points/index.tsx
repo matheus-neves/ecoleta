@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Feather as Icon } from '@expo/vector-icons';
 import { TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { SvgUri } from 'react-native-svg';
 import * as Location from 'expo-location';
 import api from '../../services/api';
@@ -29,17 +29,23 @@ interface Item {
   image_url: string;
 }
 
+interface Params {
+  uf: string;
+  city: string;
+  coords?: Coords;
+}
+
+interface Coords {
+  latitude: number;
+  longitude: number;
+}
+
 interface Point {
   id: number;
   name: string;
   image: string;
   latitude: string;
   longitude: string;
-}
-
-interface Coords {
-  latitude: number;
-  longitude: number;
 }
 
 const Points: React.FC = () => {
@@ -51,55 +57,65 @@ const Points: React.FC = () => {
     longitude: 0,
   });
   const { goBack, navigate } = useNavigation();
+  const route = useRoute();
 
-  const loadItems = async (): Promise<void> => {
-    const response = await api.get<Item[]>('items');
-    setItems(response.data);
-  };
+  const { uf, city, coords } = route.params as Params;
 
-  const loadPosition = async (): Promise<void> => {
-    const { status } = await Location.requestPermissionsAsync();
+  useEffect(() => {
+    const loadPosition = async (): Promise<void> => {
+      if (coords?.latitude === undefined) {
+        const { status } = await Location.requestPermissionsAsync();
 
-    if (status !== 'granted') {
-      Alert.alert(
-        'Oooops...',
-        'Precisamos de sua permissão para obter a localização',
-      );
-      return;
-    }
+        if (status !== 'granted') {
+          Alert.alert(
+            'Oooops...',
+            'Precisamos de sua permissão para obter a localização',
+          );
+          return;
+        }
+        const location = await Location.getCurrentPositionAsync();
+        const { latitude, longitude } = location.coords;
 
-    const location = await Location.getCurrentPositionAsync();
+        setInitialPosition({
+          latitude,
+          longitude,
+        });
 
-    const { latitude, longitude } = location.coords;
+        return;
+      }
 
-    setInitialPosition({
-      latitude,
-      longitude,
-    });
-  };
+      const { latitude, longitude } = coords;
 
-  const loadPoints = async (): Promise<void> => {
+      setInitialPosition({
+        latitude,
+        longitude,
+      });
+    };
+    loadPosition();
+  }, [coords]);
+
+  const loadPoints = useCallback(async () => {
     const response = await api.get<Point[]>('points', {
       params: {
-        city: 'Pelotas',
-        uf: 'RS',
-        items: [1, 2],
+        city,
+        uf,
+        items: selectedItems,
       },
     });
 
     setPoints(response.data);
-  };
-
-  useEffect(() => {
-    loadItems();
-  }, []);
-
-  useEffect(() => {
-    loadPosition();
-  }, []);
+  }, [city, uf, selectedItems]);
 
   useEffect(() => {
     loadPoints();
+  }, [loadPoints]);
+
+  useEffect(() => {
+    const loadItems = async (): Promise<void> => {
+      const response = await api.get<Item[]>('items');
+      setItems(response.data);
+    };
+    loadItems();
   }, []);
 
   const handleSelectItem = (id: number): void => {
