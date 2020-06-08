@@ -36,6 +36,8 @@ export const Button = styled(RectButton)`
   overflow: hidden;
   align-items: center;
   margin-top: 8px;
+
+  opacity: ${attr => (attr.enabled ? '1' : '0.7')};
 `;
 
 export const ButtonIcon = styled.View`
@@ -44,6 +46,9 @@ export const ButtonIcon = styled.View`
   background-color: rgba(0, 0, 0, 0.1);
   justify-content: center;
   align-items: center;
+
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
 `;
 
 export const ButtonText = styled.Text`
