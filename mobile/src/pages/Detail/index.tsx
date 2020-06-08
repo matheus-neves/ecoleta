@@ -26,6 +26,7 @@ interface Params {
 interface Data {
   point: {
     image: string;
+    image_url: string;
     name: string;
     email: string;
     whatsapp: string;
@@ -72,10 +73,9 @@ const Detail: React.FC = () => {
         <TouchableOpacity onPress={() => goBack()}>
           <Icon name="arrow-left" size={20} color="#34cb79" />
         </TouchableOpacity>
-
         <PointImage
           source={{
-            uri: data.point.image,
+            uri: data.point.image_url,
           }}
         />
 

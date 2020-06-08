@@ -10,7 +10,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
 import axios from 'axios';
-import config from '../../config';
+import config from '../../config/google';
 
 import logo from '../../assets/logo.png';
 import HomeBackground from '../../assets/home-background.png';
@@ -120,6 +120,8 @@ const Home: React.FC = () => {
     if (city === '0') return;
 
     try {
+      setLoading(true);
+      setEnabledButton(false);
       const { API_KEY } = config;
       const response = await axios.get<GoogleGeoResponse>(`
       https://maps.googleapis.com/maps/api/geocode/json?address=${city},${uf}&key=${API_KEY}
@@ -128,7 +130,9 @@ const Home: React.FC = () => {
       const { location } = response.data.results[0].geometry;
       setCoords({ latitude: location.lat, longitude: location.lng });
       setEnabledButton(true);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       Alert.alert('Erro ao efetuar a busca...');
     }
   };

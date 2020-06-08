@@ -44,6 +44,7 @@ interface Point {
   id: number;
   name: string;
   image: string;
+  image_url: string;
   latitude: string;
   longitude: string;
 }
@@ -147,7 +148,7 @@ const Points: React.FC = () => {
                 longitudeDelta: 0.014,
               }}
             >
-              {points.map(({ id, image, name, latitude, longitude }) => (
+              {points.map(({ id, image_url, name, latitude, longitude }) => (
                 <MapMarker
                   key={id}
                   onPress={() => navigate('Detail', { point_id: id })}
@@ -159,7 +160,7 @@ const Points: React.FC = () => {
                   <MapMarkerContainer>
                     <MapMarkerImage
                       source={{
-                        uri: image,
+                        uri: image_url,
                       }}
                     />
                     <MapMarkerTitle>{name}</MapMarkerTitle>
