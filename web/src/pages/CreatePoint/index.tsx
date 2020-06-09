@@ -2,8 +2,9 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
-
 import axios from 'axios';
+import Dropzone from '../../components/Dropzone';
+
 import api from '../../services/api';
 import Header from '../../components/Header';
 import { Container, Form, FieldGroup, Field, ItemsList } from './styles';
@@ -46,6 +47,7 @@ const CreatePoint: React.FC = () => {
     0,
     0,
   ]);
+  const [selectedFile, setSelectedFile] = useState<File>();
 
   const history = useHistory();
 
@@ -125,20 +127,22 @@ const CreatePoint: React.FC = () => {
     e.preventDefault();
 
     const { name, email, whatsapp } = formData;
-    const uf = selectedUf;
-    const city = selectedCity;
     const [latitude, longitude] = selectedPosition;
 
-    const data = {
-      name,
-      email,
-      whatsapp,
-      uf,
-      city,
-      latitude,
-      longitude,
-      items: selectedItems,
-    };
+    const data = new FormData();
+
+    data.append('name', name);
+    data.append('email', email);
+    data.append('whatsapp', whatsapp);
+    data.append('uf', selectedUf);
+    data.append('city', selectedCity);
+    data.append('latitude', String(latitude));
+    data.append('longitude', String(longitude));
+    data.append('items', selectedItems.join(','));
+
+    if (selectedFile) {
+      data.append('image', selectedFile);
+    }
 
     await api.post('points', data);
 
@@ -154,6 +158,8 @@ const CreatePoint: React.FC = () => {
           Cadastro do
           <br /> ponto de coleta
         </h1>
+
+        <Dropzone onFileUploaded={setSelectedFile} />
 
         <fieldset>
           <legend>
