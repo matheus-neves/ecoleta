@@ -33,6 +33,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-unused-expressions": "off",
+    "camelcase": "off",
     "react/jsx-props-no-spreading": "off",
     "react/jsx-filename-extension": [
       1,
